@@ -1,5 +1,7 @@
 from pathlib import Path
 import json
+import plotly.express as px
+import pandas as pd
 
 #将数据集作为字符串读取并转换为python对象
 path = Path('eq_data/eq_data_1_day_m1.json')
@@ -13,7 +15,7 @@ all_eq_data = json.loads(contents)
 
 #查看数据集中的所有地震
 all_eq_dicts = all_eq_data['features']
-print(len(all_eq_dicts))
+# print(len(all_eq_dicts))
 
 mags, titles, lons, lats = [], [], [], []
 for eq_dict in all_eq_dicts:
@@ -26,7 +28,26 @@ for eq_dict in all_eq_dicts:
     lons.append(lon)
     lats.append(lat)
 
-print(mags[:10])
-print(titles[:10])
-print(lons[:10])
-print(lats[:10])
+# print(mags[:10])
+# print(titles[:10])
+# print(lons[:10])
+# print(lats[:10])
+
+data = pd.DataFrame(
+    data=zip(lons, lats, titles, mags),
+    columns=['Longitude', 'Latitude', 'position', 'magnitude']
+)
+
+fig = px.scatter(
+    data,
+    x='Longitude',
+    y='Latitude',
+    range_x=[-200, 200],
+    range_y=[-100, 100],
+    width=800,
+    height=800,
+    title='全球地震散点图',
+    size='magnitude',
+    size_max=10
+)
+fig.show()
