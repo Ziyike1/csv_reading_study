@@ -4,8 +4,13 @@ import plotly.express as px
 import pandas as pd
 
 #将数据集作为字符串读取并转换为python对象
-path = Path('eq_data/eq_data_1_day_m1.json')
-contents = path.read_text()
+# path = Path('eq_data/eq_data_1_day_m1.json')
+path = Path('eq_data/eq_data_30_day_m1.json')
+try:
+    contents = path.read_text()
+except:
+    contents = path.read_text(encoding='utf8')
+
 all_eq_data = json.loads(contents)
 
 # #将数据文件转换为更易于阅读的版本
@@ -48,6 +53,8 @@ fig = px.scatter(
     height=800,
     title='全球地震散点图',
     size='magnitude',
-    size_max=10
+    size_max=10,
+    color='magnitude',
+    hover_name='position',
 )
 fig.show()
